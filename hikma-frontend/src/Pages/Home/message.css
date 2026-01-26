@@ -1,0 +1,59 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap");
+
+body {
+  font-family: "Roboto", sans-serif;
+  background: #c8cacc;
+}
+
+.body {
+  padding: 100px 0;
+}
+
+.section-header,
+.testimonial-block_user_info_name {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.section-header::after,
+.testimonial-block_user_info_name::after {
+  content: "";
+  height: 4px;
+  width: 100px;
+  background: #fca737;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.testimonial-view {
+  max-width: 900px;
+  margin: auto;
+  padding: 50px 15px;
+}
+
+.testimonial-block {
+  background: #fff;
+  padding: 40px;
+  margin: 40px;
+  box-shadow: 0 5px 30px -5px rgba(0, 0, 0, 0.15);
+}
+
+.testimonial-block_user {
+  text-align: center;
+}
+
+.testimonial-block_user_image img {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  border: 7px solid #ffdfb8;
+}
+
+.testimonial-block_content {
+  text-align: center;
+  font-size: 18px;
+}

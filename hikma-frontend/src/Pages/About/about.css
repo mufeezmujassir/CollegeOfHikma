@@ -1,0 +1,385 @@
+
+/* Management Message Wrapper */
+.manage-about-wrapper {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+  min-height: 100vh;
+}
+
+/* Main Welcome Section - Smooth Fade In Animation */
+.welcome-section {
+  opacity: 0;
+  transform: translateY(60px) scale(0.92);
+  transition: opacity 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.welcome-section.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Gradient Card - Exact colors from image: Orange → Coral → Pink */
+.gradient-card {
+  background: linear-gradient(115deg, #0b3d0b, #2fa84f, #a8f0c6);
+}
+ 
+
+/* Profile Image Container */
+.profile-image-container {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: gentleFloat 4s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* Profile Image with White Border */
+.profile-image {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 8px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s ease;
+  background: white;
+}
+
+.profile-image:hover {
+  transform: scale(1.08);
+  box-shadow: 
+    0 25px 70px rgba(0, 0, 0, 0.2),
+    0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Content Box */
+.content-box {
+  position: relative;
+  z-index: 2;
+  padding-left: 20px;
+}
+
+/* Name Title - Bold and Large */
+.name-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
+  animation: slideInRight 1s ease-out;
+  line-height: 1.2;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Elegant Divider Line */
+.divider {
+  width: 100px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 3px;
+  animation: growLine 1.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes growLine {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 100px;
+    opacity: 1;
+  }
+}
+
+/* Position Title */
+.position-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  opacity: 0.98;
+  animation: slideInRight 1.3s ease-out;
+  text-transform: capitalize;
+}
+
+/* Message Text - Description */
+.message-text {
+  font-size: 1.08rem;
+  line-height: 1.9;
+  opacity: 0.96;
+  text-align: justify;
+  animation: fadeInContent 1.5s ease;
+  font-weight: 400;
+}
+
+@keyframes fadeInContent {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 0.96;
+    transform: translateY(0);
+  }
+}
+
+/* Quote Section - Hadith */
+.quote-section {
+  border-top: 2px solid rgba(255, 255, 255, 0.4);
+  padding-top: 30px;
+  margin-top: 30px;
+  animation: fadeInContent 1.8s ease;
+}
+
+.quote-header {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  margin-bottom: 20px;
+}
+
+.quote-content {
+  padding-left: 25px;
+  border-left: 4px solid rgba(255, 255, 255, 0.6);
+  position: relative;
+}
+
+.quote-text {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  opacity: 0.94;
+  font-weight: 400;
+  margin-bottom: 15px;
+}
+
+.quote-text:last-child {
+  margin-bottom: 0;
+}
+
+/* Enhanced Shadow for Card */
+.gradient-card {
+  box-shadow: 
+    0 20px 60px rgba(255, 87, 34, 0.2),
+    0 10px 30px rgba(255, 107, 69, 0.15),
+    0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.welcome-section.show .gradient-card {
+  box-shadow: 
+    0 25px 70px rgba(255, 87, 34, 0.25),
+    0 15px 40px rgba(255, 107, 69, 0.2),
+    0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Glass Morphism Overlay */
+.gradient-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.7;
+}
+
+/* Decorative Glow Effect */
+.gradient-card::after {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.1) 30%,
+    transparent 60%
+  );
+  bottom: -150px;
+  right: -150px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* Text Selection Color */
+.gradient-card ::selection {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .name-title {
+    font-size: 2.3rem;
+  }
+
+  .position-title {
+    font-size: 1.2rem;
+  }
+
+  .message-text {
+    font-size: 1rem;
+  }
+
+  .content-box {
+    padding-left: 0;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .name-title {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .position-title {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .divider {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80px;
+  }
+
+  .message-text {
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .profile-image-container {
+    width: 220px;
+    height: 220px;
+  }
+
+  .profile-image {
+    width: 200px;
+    height: 200px;
+  }
+
+  .quote-section {
+    text-align: center;
+  }
+
+  .quote-content {
+    border-left: none;
+    border-top: 3px solid rgba(255, 255, 255, 0.6);
+    padding-left: 0;
+    padding-top: 15px;
+    text-align: center;
+  }
+
+  .quote-text {
+    font-size: 0.95rem;
+  }
+
+  .gradient-card {
+    padding: 35px 25px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .name-title {
+    font-size: 1.7rem;
+  }
+
+  .position-title {
+    font-size: 1rem;
+  }
+
+  .message-text {
+    font-size: 0.9rem;
+    text-align: left;
+  }
+
+  .profile-image-container {
+    width: 180px;
+    height: 180px;
+  }
+
+  .profile-image {
+    width: 170px;
+    height: 170px;
+    border: 6px solid rgba(255, 255, 255, 0.95);
+  }
+
+  .divider {
+    width: 60px;
+  }
+
+  .quote-header {
+    font-size: 1.1rem;
+  }
+
+  .quote-text {
+    font-size: 0.88rem;
+  }
+
+  .gradient-card {
+    padding: 30px 20px !important;
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Additional fade-in stages for multiple cards */
+.welcome-section:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.welcome-section:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.welcome-section:nth-child(4) {
+  animation-delay: 0.6s;
+}

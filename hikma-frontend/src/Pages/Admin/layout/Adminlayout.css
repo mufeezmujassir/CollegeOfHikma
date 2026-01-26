@@ -1,0 +1,500 @@
+/* Admin Layout Wrapper */
+.admin-layout-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Main Content Area */
+.admin-content {
+  flex: 1;
+  margin-left: 280px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+}
+
+/* When sidebar is collapsed */
+.admin-sidebar.collapsed ~ .admin-content {
+  margin-left: 80px;
+}
+
+/* Top Bar */
+.admin-topbar {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.topbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  max-width: 100%;
+}
+
+/* Page Title */
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+/* Topbar Actions */
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Notification Button */
+.notification-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+}
+
+.notification-btn:hover {
+  background: #f3f4f6;
+  transform: scale(1.1);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+}
+
+/* User Profile */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 15px;
+  border-radius: 50px;
+  background: #f9fafb;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+}
+
+.user-profile:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1B5E20, #2E7D32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(27, 94, 32, 0.3);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.user-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Content Wrapper */
+.content-wrapper {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom Scrollbar for Content */
+.content-wrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.content-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.content-wrapper::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #1B5E20, #2E7D32);
+  border-radius: 10px;
+}
+
+.content-wrapper::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #2E7D32, #388E3C);
+}
+
+/* Admin Footer */
+.admin-footer {
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  padding: 20px 30px;
+  margin-top: auto;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-links a {
+  color: #1B5E20;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #2E7D32;
+  text-decoration: underline;
+}
+
+.footer-links .separator {
+  color: #d1d5db;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .admin-content {
+    margin-left: 260px;
+  }
+
+  .admin-sidebar.collapsed ~ .admin-content {
+    margin-left: 75px;
+  }
+
+  .topbar-content {
+    padding: 18px 25px;
+  }
+
+  .content-wrapper {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 992px) {
+  .admin-content {
+    margin-left: 240px;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
+  }
+
+  .topbar-content {
+    padding: 15px 20px;
+  }
+
+  .content-wrapper {
+    padding: 20px;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .user-profile {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-content {
+    margin-left: 0;
+    margin-bottom: 70px; /* Space for bottom navbar */
+  }
+
+  .admin-sidebar.collapsed ~ .admin-content {
+    margin-left: 0;
+  }
+
+  .admin-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+  }
+
+  .topbar-content {
+    padding: 12px 15px;
+  }
+
+  .page-title {
+    font-size: 1.2rem;
+  }
+
+  .content-wrapper {
+    padding: 15px;
+    margin-top: 70px; /* Space for top bar */
+  }
+
+  .topbar-actions {
+    gap: 10px;
+  }
+
+  .notification-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+  }
+
+  .user-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 1.1rem;
+  }
+
+  .admin-footer {
+    padding: 15px;
+    margin-bottom: 70px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .content-wrapper {
+    padding: 12px;
+  }
+
+  .page-title {
+    font-size: 1.1rem;
+  }
+
+  .notification-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1.2rem;
+  }
+
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .admin-footer {
+    padding: 12px;
+  }
+
+  .footer-content {
+    font-size: 0.8rem;
+  }
+
+  .footer-links a {
+    font-size: 0.8rem;
+  }
+}
+
+/* Loading State */
+.content-wrapper.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #1B5E20;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Card Styles for Content */
+.admin-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.admin-card:hover {
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.admin-card-header {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* Button Styles */
+.btn-admin-primary {
+  background: linear-gradient(135deg, #1B5E20, #2E7D32);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
+}
+
+.btn-admin-primary:hover {
+  background: linear-gradient(135deg, #2E7D32, #388E3C);
+  box-shadow: 0 6px 16px rgba(27, 94, 32, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-admin-secondary {
+  background: white;
+  color: #1B5E20;
+  border: 2px solid #1B5E20;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-admin-secondary:hover {
+  background: #1B5E20;
+  color: white;
+  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
+}
+
+/* Smooth Page Transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.4s ease;
+}
+
+.page-exit {
+  opacity: 1;
+}
+
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Print Styles */
+@media print {
+  .admin-sidebar,
+  .admin-topbar,
+  .admin-footer {
+    display: none;
+  }
+
+  .admin-content {
+    margin-left: 0;
+    margin-bottom: 0;
+  }
+
+  .content-wrapper {
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .admin-card {
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+  }
+}
