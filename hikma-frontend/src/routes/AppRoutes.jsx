@@ -14,6 +14,7 @@ import ResultPage from '../Pages/Results/Results'
 import AboutManage from '../Pages/Admin/about-editor/AboutManage'
 import AboutHome from'../Pages/About/About'
 import NewsList from'../components/News/NewsList'
+import ManageResult from '../Pages/Admin/result-editor/ManageResult' 
 const AppRoutes = () => {
   return (
     <Routes>
@@ -31,6 +32,7 @@ const AppRoutes = () => {
         <Route path="admin/home/news" element={<NewsManagement />} />
         <Route path='/admin/staff' element={<StaffManagement />} />
         <Route path='/admin/about' element={<AboutManage/>}/>
+        <Route path="/admin/results" element={<ManageResult />} />
       </Route>
     </Routes>
   )

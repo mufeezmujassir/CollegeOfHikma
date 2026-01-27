@@ -5,14 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class StudentDto {
+@NoArgsConstructor
+@AllArgsConstructor
+
+public class SubjectDto {
     private Long id;
-    private String indexNumber;
-    private String name;
-    private String year;
-    private String semester;
+    private String subjectName;
+
 }

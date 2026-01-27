@@ -5,21 +5,23 @@ import com.hikmamadrasa.HikmaProject.entity.Student;
 
 public class StudentMapper {
 
-
-    public static StudentDto mapToStudentDto(Student student) {
+    public static StudentDto mapToDto(Student student) {
         return new StudentDto(
                 student.getId(),
-                student.getIndexno(),
-                student.getStudentname()
+                student.getIndexNumber(),
+                student.getName(),
+                student.getYear(),
+                student.getSemester()
         );
     }
 
-    public static Student mapToStudent(StudentDto studentDto) {
+    public static Student mapToEntity(StudentDto dto){
         return new Student(
-                studentDto.getId(),
-                studentDto.getIndexno(),
-                studentDto.getStudentname()
-
+                dto.getId(),
+                dto.getIndexNumber(),
+                dto.getName(),
+                dto.getYear(),
+                dto.getSemester()
         );
     }
 }

@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react'
 
+
 const Results = () => {
     const [showResulFields, setShowResultFields] = useState(true);
   return (
@@ -16,7 +17,11 @@ const Results = () => {
                     <div className='col-12'>
                         <div className='form-group'>
                             <label htmlFor="studentName">Student Name</label>
-                            <input type="text" className='form-control' id="studentName" />
+                            <input type="text" className='form-control' id="name" name='name' />
+                        </div>
+                        <div>
+                            <label htmlFor="studentEmail">Student indexNumber</label>
+                            <input type="text" className='form-control' id="indexNumber" name='indexNumber'/>
                         </div>
                         <div>
                             <button type='submit' className='btn btn-primary'>Search</button>

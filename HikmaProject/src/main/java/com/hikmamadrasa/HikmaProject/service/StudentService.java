@@ -5,11 +5,7 @@ import com.hikmamadrasa.HikmaProject.dto.StudentDto;
 import java.util.List;
 
 public interface StudentService {
+    StudentDto save(StudentDto dto);
+    List<StudentDto> getAll();
 
-    StudentDto createStudent(StudentDto studentDto);
-    StudentDto getStudentById(long id);
-    List<StudentDto> getAllStudents();
-
-    StudentDto updateStudent( Long id,StudentDto updatedstudent);
-    void deleteStudent(long id);
 }

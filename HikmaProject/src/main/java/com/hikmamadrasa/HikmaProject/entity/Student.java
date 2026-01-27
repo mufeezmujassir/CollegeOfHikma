@@ -1,25 +1,27 @@
 package com.hikmamadrasa.HikmaProject.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name="student")
-
-
+@Table(name="students")
 public class Student {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
+    private String indexNumber;
+    private String name;
+    private String year;
+    private String semester;
 
-    @Column(name="index_no",nullable=false,unique=true)
-    private String indexno;
-
-    @Column(name="student_name",nullable=false)
-    private String studentname;
 
 }

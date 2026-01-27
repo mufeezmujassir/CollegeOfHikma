@@ -45,6 +45,7 @@ const Footer = () => {
           </p>
           <p className="developer">
             Developed by <span>MaseHolding</span>
+            Developed by <span>Innovator Ai Solutions</span>
           </p>
         </div>
       </div>

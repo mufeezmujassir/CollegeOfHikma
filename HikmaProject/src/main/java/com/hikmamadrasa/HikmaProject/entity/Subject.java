@@ -9,19 +9,13 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name="results")
-public class Result {
-
+@NoArgsConstructor
+@Table(name="subjects")
+public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Student student;
-    @ManyToOne
-    private Subject subject;
-    private Integer mark;
-    private String grade;
+    private String subjectName;
 
 }

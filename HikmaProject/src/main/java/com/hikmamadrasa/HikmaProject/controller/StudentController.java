@@ -1,51 +1,30 @@
 package com.hikmamadrasa.HikmaProject.controller;
 
-
 import com.hikmamadrasa.HikmaProject.dto.StudentDto;
-import com.hikmamadrasa.HikmaProject.mapper.StudentMapper;
 import com.hikmamadrasa.HikmaProject.service.StudentService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/auth/student")
+@CrossOrigin(origins = "http://localhost:3000")
 @AllArgsConstructor
-@RequestMapping("/api/student")
 public class StudentController {
-    private StudentService studentService;
 
-    //build to add the student to the system
-    @PostMapping
-    public ResponseEntity<StudentDto> createStudent(@RequestBody StudentDto studentDto) {
-        StudentDto savedStudent=studentService.createStudent(studentDto);
-        return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
-    }
-
-    @GetMapping("{id}")
-    public ResponseEntity<StudentDto> getStudentById(@PathVariable("id") long stid) {
-       StudentDto studentDto= studentService.getStudentById(stid);
-       return ResponseEntity.ok(studentDto);
-    }
+    private final StudentService studentService;
 
     @GetMapping
-    public ResponseEntity<List<StudentDto>> getAllStudents() {
-        List<StudentDto> students=studentService.getAllStudents();
-        return ResponseEntity.ok(students);
+    public List<StudentDto> getAll(){
+        return studentService.getAll();
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<StudentDto> updateStudent( @PathVariable("id") Long id,@RequestBody StudentDto studentDto) {
-            StudentDto savedStudent=studentService.updateStudent(id, studentDto);
-            return ResponseEntity.ok(savedStudent);
-    }
-
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable("id") long stid) {
-        studentService.deleteStudent(stid);
-        return ResponseEntity.ok("Student deleted successfully");
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentDto> getById(@PathVariable Long id){
+        StudentDto dto = studentService.getAll().stream().filter(s -> s.getId().equals(id)).findFirst().orElse(null);
+        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
     }
 
 }
