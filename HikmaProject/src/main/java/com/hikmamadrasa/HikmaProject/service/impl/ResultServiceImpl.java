@@ -126,10 +126,4 @@ public class ResultServiceImpl implements ResultService {
             throw new RuntimeException("Failed to upload the Excel file");
         }
     }
-
-    @Override
-    public ResultDto getResultSpecific(String indexNumber, String name) {
-
-        return null;
-    }
 }

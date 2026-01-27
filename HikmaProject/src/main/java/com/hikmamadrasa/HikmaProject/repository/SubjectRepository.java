@@ -7,4 +7,5 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     boolean existsBySubjectName(String subjectName);
     Subject findBySubjectName(String subjectName);
 
+
 }

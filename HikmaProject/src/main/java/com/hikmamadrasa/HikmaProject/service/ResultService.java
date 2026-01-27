@@ -9,5 +9,5 @@ public interface ResultService {
     ResultDto save (ResultDto dto);
     List<ResultDto> getAll();
     void uploadExcel(MultipartFile file);
-    ResultDto getResultSpecific(String indexNumber,String name);
+
 }

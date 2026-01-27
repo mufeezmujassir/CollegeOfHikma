@@ -10,8 +10,8 @@ public class ResultMapper {
     public static ResultDto mapToDto(Result result) {
         return new ResultDto(
                 result.getId(),
-                result.getStudent().getId(),
-                result.getSubject().getId(),
+                result.getSubject().getId(),      // CORRECT: subjectId in 2nd position
+                result.getStudent().getId(),      // CORRECT: studentId in 3rd position
                 result.getMark(),
                 result.getGrade()
         );
