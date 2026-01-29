@@ -16,7 +16,7 @@ import AboutHome from'../Pages/About/About'
 import NewsList from'../components/News/NewsList'
 import ManageResult from '../Pages/Admin/result-editor/ManageResult'
 import { ProtectedRoute } from '../components/ProtectedRoute'
-
+import ManageUpcomming from '../Pages/Admin/upcomming-editor/UpcommingManage'
 const AppRoutes = () => {
   return (
     <Routes>
@@ -38,6 +38,7 @@ const AppRoutes = () => {
           <Route path='/admin/staff' element={<StaffManagement />} />
           <Route path='/admin/about' element={<AboutManage/>}/>
           <Route path="/admin/results" element={<ManageResult />} />
+          <Route path="/admin/upcomming" element={<ManageUpcomming />} />
         </Route>
       </Route>
     </Routes>

@@ -35,7 +35,7 @@ const AdminSidebar = () => {
     },
     {
       title: 'Upcoming Events',
-      path: '/admin/home/events',
+      path: '/admin/upcomming',
       icon: '📅'
     },
     {
