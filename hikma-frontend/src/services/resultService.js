@@ -8,3 +8,4 @@ export const GetAllResult=()=>{
 export const AddResult=(formdata)=>{
     return axios.post(REST_API_BASE_URL,formdata);
 }   
+

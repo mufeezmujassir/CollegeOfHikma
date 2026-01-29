@@ -126,4 +126,10 @@ public class ResultServiceImpl implements ResultService {
             throw new RuntimeException("Failed to upload the Excel file");
         }
     }
+
+    @Override
+    public void DeleteStudentMark(List id) {
+        resultRepository.deleteByStudentIds(id);
+        System.out.println("Student marks deleted");
+    }
 }

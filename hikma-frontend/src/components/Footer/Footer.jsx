@@ -44,7 +44,7 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Dharul Hikma. All Rights Reserved.
           </p>
           <p className="developer">
-            Developed by <span>Innovator Ai Solutions</span>
+            Developed by <span>Innovexa AI Solutions</span>
           </p>
         </div>
       </div>

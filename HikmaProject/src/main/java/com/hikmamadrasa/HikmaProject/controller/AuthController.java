@@ -35,12 +35,12 @@ public class AuthController {
         if (!passwordEncoder.matches(request.getPassword(), admin.getPassword())) {
             System.out.println("Invalid password");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new LoginResponse(null, "Invalid password"));
+                    .body(new LoginResponse(null, "Invalid password", false));
         }
 
         String token = jwtUtil.generateToken(admin.getEmail());
 
-        return ResponseEntity.ok(new LoginResponse(token, "Login successful"));
+        return ResponseEntity.ok(new LoginResponse(token, "Login successful", true));
     }
 
 }

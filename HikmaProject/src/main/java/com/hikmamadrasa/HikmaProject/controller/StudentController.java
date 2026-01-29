@@ -27,4 +27,9 @@ public class StudentController {
         return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("/{year}")
+    public ResponseEntity<String> deleteByYear(@PathVariable String year) {
+        studentService.DeleteStudent(year);
+        return ResponseEntity.ok("Students and results deleted successfully");
+    }
 }

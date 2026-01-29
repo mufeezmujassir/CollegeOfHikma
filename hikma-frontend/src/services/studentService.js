@@ -8,3 +8,6 @@ export const GetAllStudents=()=>{
 export const GetStudentById=(id)=>{
     return axios.get(REST_API_BASE_URL + '/' + id);
 }
+export const DeleteStudentsByYear = (year) => {
+  return axios.delete(`${REST_API_BASE_URL}/${year}`);
+};

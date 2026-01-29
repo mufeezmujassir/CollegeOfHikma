@@ -14,9 +14,11 @@ import lombok.Setter;
 public class LoginResponse {
     private String token;
     private String message;
+    private boolean isAdmin;
 
-    public LoginResponse(String token, String message) {
+    public LoginResponse(String token, String message, boolean isAdmin) {
         this.token = token;
         this.message = message;
+        this.isAdmin = isAdmin;
     }
 }

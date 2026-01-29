@@ -2,10 +2,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
+import { useAuth } from "../../hooks/useAuth";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const isAdminLoggedIn = !!localStorage.getItem("token");
+  const { isAdmin, logout } = useAuth();
+  const isAdminLoggedIn = !!isAdmin;
 
   const [isOpen, setIsOpen] = useState(false); // state to manage toggle
 
@@ -14,7 +16,7 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout();
     navigate("/");
   };
 
@@ -42,13 +44,36 @@ const Navbar = () => {
           id="madrasaNavbar"
         >
           <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-            {/* Admin Menu */}
             {isAdminLoggedIn ? (
               <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/admin/home/hero">
+                    Admin Home
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/admin/home/news">
+                    Manage News
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/admin/staff">
+                    Staff Management
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/admin/results">
+                    Manage Results
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/admin/about">
+                    About Manage
+                  </Link>
+                </li>
               </>
             ) : (
               <>
-                {/* Public Menu */}
                 <li className="nav-item">
                   <Link className="nav-link" to="/">
                     Home

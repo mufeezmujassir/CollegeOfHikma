@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GetAllResult, AddResult } from "../../../services/resultService";
-import { GetAllStudents } from "../../../services/studentService";
+import { GetAllStudents,DeleteStudentsByYear  } from "../../../services/studentService";
 import { GetAllSubjects } from "../../../services/subjectService";
 
 const ManageResult = () => {
@@ -8,6 +8,7 @@ const ManageResult = () => {
   const [subjects, setSubjects] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState(null);
+
 
   useEffect(() => {
     loadData();
@@ -91,10 +92,27 @@ const ManageResult = () => {
       }
       studentMap[r.student.id].results[r.subject.id] = r;
     });
+    const DeleteYearby = async (year) => {
+      if (!window.confirm(`Delete all students and results for year ${year}?`)) return;
 
+      try {
+        await DeleteStudentsByYear(year);
+        alert("Deleted successfully");
+        loadData(); // refresh table
+      } catch (err) {
+        console.error(err);
+        alert("Delete failed");
+      }
+    };
     return (
       <div className="mb-5" key={year}>
         <h4 className="text-center mb-3">Year {year}</h4>
+        <button
+          onClick={() => DeleteYearby(year)}
+          className="btn btn-danger mb-2"
+        >
+          Delete Results
+        </button>
 
         <table className="table table-bordered table-striped">
           <thead className="table-dark">

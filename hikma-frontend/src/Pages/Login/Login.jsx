@@ -3,6 +3,7 @@ import { useState } from 'react'
 import './Login.css'
 import { loginAdmin } from '../../services/authService'
 import{useNavigate} from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
 
 
 const Login = () => {
@@ -12,6 +13,7 @@ const Login = () => {
     const[showPassword,setShowPassword]=useState(false);
     const[loading,setLoading]=useState(false);
     const navigate=useNavigate();
+    const { login } = useAuth();
 
     const handleSubmit= async(e)=>{
         e.preventDefault();
@@ -20,15 +22,22 @@ const Login = () => {
 
         try{
             const response=await loginAdmin(email,password);
+            console.log("Login response:", response.data); // debug log
 
-            localStorage.setItem("token",response.data.token);
-            alert(response.data.message);
-
-            navigate('/admin/home/hero');
+            if (response.data && response.data.token) {
+                // backend may return `isAdmin` or `admin` field — accept both
+                const adminFlag = response.data.isAdmin === true || response.data.admin === true;
+                // use context login to store token and admin flag
+                login(response.data.token, adminFlag);
+                alert(response.data.message);
+                navigate('/admin/home/hero');
+            } else {
+                alert("Login failed - no token received");
+            }
         }
         catch(error){
-            alert("invalid credentials");
-            console.error("Login error:",error);
+            console.error("Login error:", error); // debug log
+            alert("Invalid credentials or server error");
         }
         finally{
             setLoading(false);
