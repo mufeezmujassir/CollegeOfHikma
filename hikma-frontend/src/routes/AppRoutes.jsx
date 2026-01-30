@@ -29,6 +29,7 @@ const AppRoutes = () => {
       <Route path='/about' element={<AboutHome/>}/>
       <Route path='/news' element={<NewsList/>}/>
       
+      
       {/* Admin Routes - Protected Layout */}
       <Route element={<ProtectedRoute />}>
         <Route element={<AdminLayout />}>

@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/auth/event")
-
 public class UpcommingEventController {
     private final UpcommingEventService upcommingEventService;
 
