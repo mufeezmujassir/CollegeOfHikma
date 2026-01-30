@@ -30,8 +30,8 @@ const Footer = () => {
           <div className="col-md-4 footer-section">
             <h5>Contact</h5>
             <p>📍 Sri Lanka</p>
-            <p>📞 +94 XX XXX XXXX</p>
-            <p>✉️ hikmamadrasa@gmail.com</p>
+            <p>📞 +94 771719050</p>
+            <p>✉️ dharulhikma.info@gmail.com</p>
           </div>
 
         </div>

@@ -100,7 +100,7 @@ const UpcommingEvent = () => {
                   </div>
 
                   {/* Event Details */}
-                  <div className="p-3 d-flex flex-column h-100">
+                  <div className="p-3 d-flex flex-column ">
                     <h6 className="fw-bold event-title">{event.title}</h6>
 
                     {/* Event Date */}

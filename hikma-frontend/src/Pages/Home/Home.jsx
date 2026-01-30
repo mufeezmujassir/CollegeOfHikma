@@ -10,8 +10,9 @@ const Home = () => {
         <PopupBox/>
         <HeroSlider/>
         <UpcommingEvent/>
-        <NewsLayer/>
+        
         <ManagementMessage/>
+        <NewsLayer/>
         
     </>
   )
