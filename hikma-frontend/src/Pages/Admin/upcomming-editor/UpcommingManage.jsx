@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GetAllUpcomming, AddUpcomming, UpdateUpcomming, DeleteUpcomming } from '../../../services/UpcommingService';
+import { toast } from 'react-toastify';
+import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 import './UpcommingManage.css';
 
 const UpcommingManage = () => {
@@ -15,24 +17,55 @@ const UpcommingManage = () => {
         isPopup: false,
     });
     const [imagePreview, setImagePreview] = useState(null);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
 
-    // Load all events on component mount
+    // Confirmation dialog state
+    const [confirmDialog, setConfirmDialog] = useState({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: null,
+        type: 'warning'
+    });
+
+    // Show confirm dialog helper
+    const showConfirm = (title, message, onConfirm, type = 'warning') => {
+        setConfirmDialog({
+            isOpen: true,
+            title,
+            message,
+            onConfirm: () => {
+                onConfirm();
+                closeConfirm();
+            },
+            type
+        });
+    };
+
+    const closeConfirm = () => {
+        setConfirmDialog({
+            isOpen: false,
+            title: '',
+            message: '',
+            onConfirm: null,
+            type: 'warning'
+        });
+    };
+
     useEffect(() => {
         fetchAllUpcomming();
     }, []);
 
     const fetchAllUpcomming = () => {
+        setLoading(true);
         GetAllUpcomming().then(res => {
             setEvents(res.data);
             setLoading(false);
         }).catch(err => {
             console.error(err);
             setLoading(false);
-        })
-
-    }
+            toast.error('Failed to load events');
+        });
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -64,7 +97,6 @@ const UpcommingManage = () => {
         }));
     };
 
-    // Convert byte array/ArrayBuffer to base64 safely (avoid spreading large arrays)
     const bytesToBase64 = (bytes) => {
         if (!bytes) return '';
         if (typeof bytes === 'string') return bytes;
@@ -75,7 +107,7 @@ const UpcommingManage = () => {
         else return '';
 
         let binary = '';
-        const chunkSize = 0x8000; // safe chunk size
+        const chunkSize = 0x8000;
         for (let i = 0; i < arr.length; i += chunkSize) {
             const slice = arr.subarray(i, i + chunkSize);
             binary += String.fromCharCode.apply(null, slice);
@@ -98,56 +130,61 @@ const UpcommingManage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
-        setSuccess('');
 
-        // Validation
         if (!formData.title.trim()) {
-            setError('Title is required');
+            toast.error('Title is required');
             return;
         }
         if (!formData.description.trim()) {
-            setError('Description is required');
+            toast.error('Description is required');
             return;
         }
         if (!formData.EventDate) {
-            setError('Event date is required');
+            toast.error('Event date is required');
             return;
         }
 
-        try {
-            const formDataToSend = new FormData();
+        const action = editingId ? 'update' : 'create';
+        showConfirm(
+            editingId ? 'Update Event' : 'Create Event',
+            editingId
+                ? 'Are you sure you want to update this event?'
+                : 'Are you sure you want to create this new event?',
+            async () => {
+                try {
+                    const formDataToSend = new FormData();
 
-            const eventDto = {
-                title: formData.title,
-                description: formData.description,
-                EventDate: formData.EventDate,
-                isPopup: formData.isPopup,
-                isActivate: editingId ? events.find(e => e.id === editingId)?.isActivate || true : true,
-            };
+                    const eventDto = {
+                        title: formData.title,
+                        description: formData.description,
+                        EventDate: formData.EventDate,
+                        isPopup: formData.isPopup,
+                        isActivate: editingId ? events.find(e => e.id === editingId)?.isActivate || true : true,
+                    };
 
-            formDataToSend.append('event', new Blob([JSON.stringify(eventDto)], { type: 'application/json' }));
+                    formDataToSend.append('event', new Blob([JSON.stringify(eventDto)], { type: 'application/json' }));
 
-            if (formData.image) {
-                formDataToSend.append('image', formData.image);
-            }
+                    if (formData.image) {
+                        formDataToSend.append('image', formData.image);
+                    }
 
-            if (editingId) {
-                // Update existing event
-                await UpdateUpcomming(editingId, formDataToSend);
-                setSuccess('Event updated successfully');
-            } else {
-                // Create new event (automatically activated)
-                await AddUpcomming(formDataToSend);
-                setSuccess('Event created successfully');
-            }
+                    if (editingId) {
+                        await UpdateUpcomming(editingId, formDataToSend);
+                        toast.success('Event updated successfully!');
+                    } else {
+                        await AddUpcomming(formDataToSend);
+                        toast.success('Event created successfully!');
+                    }
 
-            await fetchAllUpcomming();
-            resetForm();
-        } catch (err) {
-            setError(err.response?.data?.message || 'Failed to save event');
-            console.error(err);
-        }
+                    await fetchAllUpcomming();
+                    resetForm();
+                } catch (err) {
+                    toast.error(err.response?.data?.message || `Failed to ${action} event`);
+                    console.error(err);
+                }
+            },
+            'warning'
+        );
     };
 
     const handleEdit = (event) => {
@@ -160,51 +197,77 @@ const UpcommingManage = () => {
         });
         if (event.image) {
             setImagePreview(`data:image/jpeg;base64,${bytesToBase64(event.image)}`);
+        } else {
+            setImagePreview(null);
         }
         setEditingId(event.id);
         setShowForm(true);
+        toast.info('Editing event - make your changes and click Update');
     };
 
-    const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this event?')) {
-            try {
-                setError('');
-                await DeleteUpcomming(id);
-                setSuccess('Event deleted successfully');
-                await fetchAllUpcomming();
-            } catch (err) {
-                setError('Failed to delete event');
-                console.error(err);
-            }
-        }
+    const handleDelete = (id) => {
+        showConfirm(
+            'Delete Event',
+            'Are you sure you want to delete this event? This action cannot be undone.',
+            async () => {
+                try {
+                    await DeleteUpcomming(id);
+                    toast.success('Event deleted successfully!');
+                    await fetchAllUpcomming();
+                } catch (err) {
+                    toast.error('Failed to delete event');
+                    console.error(err);
+                }
+            },
+            'danger'
+        );
     };
 
-    const handleToggleActivate = async (event) => {
-        try {
-            setError('');
-            const formData = new FormData();
-            const eventDto = {
-                title: event.title,
-                description: event.description,
-                EventDate: event.EventDate,
-                isPopup: event.isPopup,
-                isActivate: !event.isActivate,
-            };
+    const handleToggleActivate = (event) => {
+        const action = event.isActivate ? 'deactivate' : 'activate';
+        showConfirm(
+            event.isActivate ? 'Deactivate Event' : 'Activate Event',
+            event.isActivate
+                ? 'Are you sure you want to deactivate this event? It will be hidden from the public page.'
+                : 'Are you sure you want to activate this event? It will be visible on the public page.',
+            async () => {
+                try {
+                    const formData = new FormData();
+                    const eventDto = {
+                        title: event.title,
+                        description: event.description,
+                        EventDate: event.EventDate,
+                        isPopup: event.isPopup,
+                        isActivate: !event.isActivate,
+                    };
 
-            formData.append('event', new Blob([JSON.stringify(eventDto)], { type: 'application/json' }));
-            // Don't send image - backend will preserve existing image when no new image is provided
+                    formData.append('event', new Blob([JSON.stringify(eventDto)], { type: 'application/json' }));
 
-            await UpdateUpcomming(event.id, formData);
-            setSuccess(`Event ${!event.isActivate ? 'activated' : 'deactivated'} successfully`);
-            await fetchAllUpcomming();
-        } catch (err) {
-            setError('Failed to update event status');
-            console.error(err);
-        }
+                    await UpdateUpcomming(event.id, formData);
+                    toast.success(`Event ${action}d successfully!`);
+                    await fetchAllUpcomming();
+                } catch (err) {
+                    toast.error(`Failed to ${action} event`);
+                    console.error(err);
+                }
+            },
+            'warning'
+        );
     };
 
     return (
         <div className="upcomming-manage-container">
+            {/* Confirmation Dialog */}
+            <ConfirmDialog
+                isOpen={confirmDialog.isOpen}
+                title={confirmDialog.title}
+                message={confirmDialog.message}
+                onConfirm={confirmDialog.onConfirm}
+                onCancel={closeConfirm}
+                type={confirmDialog.type}
+                confirmText={confirmDialog.type === 'danger' ? 'Delete' : 'Confirm'}
+            />
+
             <div className="upcomming-header">
                 <h2>Manage Upcoming Events</h2>
                 <button
@@ -217,9 +280,6 @@ const UpcommingManage = () => {
                     + Add New Event
                 </button>
             </div>
-
-            {error && <div className="alert alert-error">{error}</div>}
-            {success && <div className="alert alert-success">{success}</div>}
 
             {showForm && (
                 <div className="event-form-container">
@@ -268,7 +328,7 @@ const UpcommingManage = () => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="image">Event Poster</label>
+                            <label htmlFor="image">Event Poster {editingId && '(Leave empty to keep current)'}</label>
                             <input
                                 id="image"
                                 type="file"

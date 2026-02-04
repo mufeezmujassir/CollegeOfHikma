@@ -3,6 +3,7 @@ import { useState } from "react";
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
 import { useAuth } from "../../hooks/useAuth";
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -17,6 +18,10 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
+    toast.info('You have been logged out successfully.', {
+      position: "top-right",
+      autoClose: 3000,
+    });
     navigate("/");
   };
 
@@ -118,7 +123,7 @@ const Navbar = () => {
             </button>
           ) : (
             <Link to="/login" className="btn admin-login-btn">
-               Login
+              Login
             </Link>
           )}
         </div>

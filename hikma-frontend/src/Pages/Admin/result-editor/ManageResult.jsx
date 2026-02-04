@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { GetAllResult, AddResult } from "../../../services/resultService";
-import { GetAllStudents,DeleteStudentsByYear  } from "../../../services/studentService";
+import { GetAllStudents, DeleteStudentsByYear } from "../../../services/studentService";
 import { GetAllSubjects } from "../../../services/subjectService";
+import { toast } from 'react-toastify';
+import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 
 const ManageResult = () => {
   const [groupedResults, setGroupedResults] = useState({});
@@ -9,6 +11,37 @@ const ManageResult = () => {
   const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState(null);
 
+  // Confirmation dialog state
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: null,
+    type: 'warning'
+  });
+
+  const showConfirm = (title, message, onConfirm, type = 'warning') => {
+    setConfirmDialog({
+      isOpen: true,
+      title,
+      message,
+      onConfirm: () => {
+        onConfirm();
+        closeConfirm();
+      },
+      type
+    });
+  };
+
+  const closeConfirm = () => {
+    setConfirmDialog({
+      isOpen: false,
+      title: '',
+      message: '',
+      onConfirm: null,
+      type: 'warning'
+    });
+  };
 
   useEffect(() => {
     loadData();
@@ -55,24 +88,55 @@ const ManageResult = () => {
       setGroupedResults(yearMap);
     } catch (err) {
       console.error("Error loading data", err);
+      toast.error('Failed to load results');
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!file) return alert("Please select a file");
-
-    const data = new FormData();
-    data.append("file", file);
-
-    try {
-      await AddResult(data);
-      alert("Result uploaded successfully");
-      setShowModal(false);
-      loadData();
-    } catch (err) {
-      console.error(err);
+    if (!file) {
+      toast.error("Please select a file");
+      return;
     }
+
+    showConfirm(
+      'Upload Results',
+      'Are you sure you want to upload this result sheet? This will add new student results.',
+      async () => {
+        const data = new FormData();
+        data.append("file", file);
+
+        try {
+          await AddResult(data);
+          toast.success("Result uploaded successfully!");
+          setShowModal(false);
+          setFile(null);
+          loadData();
+        } catch (err) {
+          console.error(err);
+          toast.error('Failed to upload results');
+        }
+      },
+      'warning'
+    );
+  };
+
+  const handleDeleteYear = (year) => {
+    showConfirm(
+      'Delete All Results',
+      `Are you sure you want to delete all students and results for year ${year}? This action cannot be undone.`,
+      async () => {
+        try {
+          await DeleteStudentsByYear(year);
+          toast.success("Deleted successfully!");
+          loadData();
+        } catch (err) {
+          console.error(err);
+          toast.error("Delete failed");
+        }
+      },
+      'danger'
+    );
   };
 
   const renderYearTable = (year, yearResults) => {
@@ -92,23 +156,12 @@ const ManageResult = () => {
       }
       studentMap[r.student.id].results[r.subject.id] = r;
     });
-    const DeleteYearby = async (year) => {
-      if (!window.confirm(`Delete all students and results for year ${year}?`)) return;
 
-      try {
-        await DeleteStudentsByYear(year);
-        alert("Deleted successfully");
-        loadData(); // refresh table
-      } catch (err) {
-        console.error(err);
-        alert("Delete failed");
-      }
-    };
     return (
       <div className="mb-5" key={year}>
         <h4 className="text-center mb-3">Year {year}</h4>
         <button
-          onClick={() => DeleteYearby(year)}
+          onClick={() => handleDeleteYear(year)}
           className="btn btn-danger mb-2"
         >
           Delete Results
@@ -149,6 +202,17 @@ const ManageResult = () => {
 
   return (
     <div className="container my-4">
+      {/* Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={closeConfirm}
+        type={confirmDialog.type}
+        confirmText={confirmDialog.type === 'danger' ? 'Delete' : 'Confirm'}
+      />
+
       <h2 className="text-center">Manage Results</h2>
 
       <div className="text-center my-3">
@@ -158,14 +222,17 @@ const ManageResult = () => {
       </div>
 
       {showModal && (
-        <div className="modal show d-block">
+        <div className="modal show d-block" style={{ background: "rgba(0,0,0,0.5)" }}>
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Upload Excel</h5>
                 <button
                   className="btn-close"
-                  onClick={() => setShowModal(false)}
+                  onClick={() => {
+                    setShowModal(false);
+                    setFile(null);
+                  }}
                 />
               </div>
 
@@ -180,7 +247,17 @@ const ManageResult = () => {
                   />
                 </div>
                 <div className="modal-footer">
-                  <button className="btn btn-success">Upload</button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      setShowModal(false);
+                      setFile(null);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button className="btn btn-success" type="submit">Upload</button>
                 </div>
               </form>
             </div>

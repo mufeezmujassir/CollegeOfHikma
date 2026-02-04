@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import{GetAllNews}from '../../../services/madrasanews'
+import { GetAllNews } from '../../../services/madrasanews';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 import './NewsManage.css';
 
 const MadrasaNewsManager = () => {
@@ -20,12 +22,49 @@ const MadrasaNewsManager = () => {
 
   const API_URL = 'http://localhost:8080/api/auth/news';
 
+  // Confirmation dialog state
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: null,
+    type: 'warning'
+  });
+
+  const showConfirm = (title, message, onConfirm, type = 'warning') => {
+    setConfirmDialog({
+      isOpen: true,
+      title,
+      message,
+      onConfirm: () => {
+        onConfirm();
+        closeConfirm();
+      },
+      type
+    });
+  };
+
+  const closeConfirm = () => {
+    setConfirmDialog({
+      isOpen: false,
+      title: '',
+      message: '',
+      onConfirm: null,
+      type: 'warning'
+    });
+  };
+
   useEffect(() => {
     fetchAllNews();
   }, []);
 
   const fetchAllNews = async () => {
-    GetAllNews().then((res)=>setNewsList(res.data),console.log(newsList)).catch(err=>console.error(err));
+    GetAllNews()
+      .then((res) => setNewsList(res.data))
+      .catch(err => {
+        console.error(err);
+        toast.error('Failed to load news');
+      });
   };
 
   const handleInputChange = (e) => {
@@ -38,13 +77,11 @@ const MadrasaNewsManager = () => {
     const totalImages = (currentNews.images?.length || 0) - imageIdsToDelete.length + files.length;
 
     if (totalImages > 5) {
-      alert('You can upload maximum 5 images');
+      toast.error('You can upload maximum 5 images');
       return;
     }
 
     setNewImages(files);
-
-    // Create preview URLs
     const previews = files.map(file => URL.createObjectURL(file));
     setPreviewImages(previews);
   };
@@ -78,43 +115,51 @@ const MadrasaNewsManager = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
+    showConfirm(
+      editMode ? 'Update News' : 'Create News',
+      editMode
+        ? 'Are you sure you want to update this news article?'
+        : 'Are you sure you want to create this news article?',
+      async () => {
+        const formData = new FormData();
 
-    const newsData = {
-      title: currentNews.title,
-      content: currentNews.content,
-      publishDate: currentNews.publishDate
-    };
+        const newsData = {
+          title: currentNews.title,
+          content: currentNews.content,
+          publishDate: currentNews.publishDate
+        };
 
-    formData.append('news', new Blob([JSON.stringify(newsData)], { type: 'application/json' }));
+        formData.append('news', new Blob([JSON.stringify(newsData)], { type: 'application/json' }));
 
-    newImages.forEach((image) => {
-      formData.append('images', image);
-    });
-
-    if (editMode && imageIdsToDelete.length > 0) {
-      formData.append('imageIdsToDelete', new Blob([JSON.stringify(imageIdsToDelete)], { type: 'application/json' }));
-    }
-
-    try {
-      if (editMode) {
-        await axios.put(`${API_URL}/${currentNews.id}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
+        newImages.forEach((image) => {
+          formData.append('images', image);
         });
-        alert('News updated successfully');
-      } else {
-        await axios.post(API_URL, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        alert('News created successfully');
-      }
-      fetchAllNews();
-      resetForm();
-    } catch (error) {
-      console.error('Error saving news:', error);
-      console.error('Error details:', error.response?.data);
-      alert('Failed to save news');
-    }
+
+        if (editMode && imageIdsToDelete.length > 0) {
+          formData.append('imageIdsToDelete', new Blob([JSON.stringify(imageIdsToDelete)], { type: 'application/json' }));
+        }
+
+        try {
+          if (editMode) {
+            await axios.put(`${API_URL}/${currentNews.id}`, formData, {
+              headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            toast.success('News updated successfully!');
+          } else {
+            await axios.post(API_URL, formData, {
+              headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            toast.success('News created successfully!');
+          }
+          fetchAllNews();
+          resetForm();
+        } catch (error) {
+          console.error('Error saving news:', error);
+          toast.error('Failed to save news');
+        }
+      },
+      'warning'
+    );
   };
 
   const handleEdit = (news) => {
@@ -124,28 +169,32 @@ const MadrasaNewsManager = () => {
     setNewImages([]);
     setImageIdsToDelete([]);
     setPreviewImages([]);
+    toast.info('Editing news - make your changes and click Update');
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this news?')) {
-      try {
-        await axios.delete(`${API_URL}/${id}`);
-        alert('News deleted successfully');
-        fetchAllNews();
-      } catch (error) {
-        console.error('Error deleting news:', error);
-        alert('Failed to delete news');
-      }
-    }
+  const handleDelete = (id) => {
+    showConfirm(
+      'Delete News',
+      'Are you sure you want to delete this news article? This action cannot be undone.',
+      async () => {
+        try {
+          await axios.delete(`${API_URL}/${id}`);
+          toast.success('News deleted successfully!');
+          fetchAllNews();
+        } catch (error) {
+          console.error('Error deleting news:', error);
+          toast.error('Failed to delete news');
+        }
+      },
+      'danger'
+    );
   };
 
   const convertToBase64Image = (imageData) => {
     if (!imageData) return null;
-    // Check if imageData is already a base64 string or a byte array
     if (typeof imageData === 'string') {
       return `data:image/jpeg;base64,${imageData}`;
     }
-    // If it's a byte array, convert it
     return `data:image/jpeg;base64,${btoa(
       new Uint8Array(imageData).reduce((data, byte) => data + String.fromCharCode(byte), '')
     )}`;
@@ -153,6 +202,17 @@ const MadrasaNewsManager = () => {
 
   return (
     <div className="news-container">
+      {/* Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={closeConfirm}
+        type={confirmDialog.type}
+        confirmText={confirmDialog.type === 'danger' ? 'Delete' : 'Confirm'}
+      />
+
       <div className="news-header">
         <h1>News Management</h1>
         <button className="btn-add" onClick={() => setShowModal(true)}>

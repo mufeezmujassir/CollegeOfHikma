@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { DeleteStaff, UpdateStaff } from '../../../services/staffService';
+import { toast } from 'react-toastify';
+import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 
 const StaffCard = ({ staff }) => {
 
@@ -13,6 +15,38 @@ const StaffCard = ({ staff }) => {
     staffJoinDate: staff.staffJoinDate
   });
 
+  // Confirmation dialog state
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: null,
+    type: 'warning'
+  });
+
+  const showConfirm = (title, message, onConfirm, type = 'warning') => {
+    setConfirmDialog({
+      isOpen: true,
+      title,
+      message,
+      onConfirm: () => {
+        onConfirm();
+        closeConfirm();
+      },
+      type
+    });
+  };
+
+  const closeConfirm = () => {
+    setConfirmDialog({
+      isOpen: false,
+      title: '',
+      message: '',
+      onConfirm: null,
+      type: 'warning'
+    });
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -22,36 +56,68 @@ const StaffCard = ({ staff }) => {
   };
 
   const handleDelete = () => {
-    DeleteStaff(staff.id)
-      .then(() => window.location.reload())
-      .catch(err => console.error(err));
+    showConfirm(
+      'Delete Staff',
+      'Are you sure you want to delete this staff member? This action cannot be undone.',
+      () => {
+        DeleteStaff(staff.id)
+          .then(() => {
+            toast.success('Staff deleted successfully!');
+            window.location.reload();
+          })
+          .catch(err => {
+            console.error(err);
+            toast.error('Failed to delete staff');
+          });
+      },
+      'danger'
+    );
   };
 
   const handleUpdate = () => {
-    const data = new FormData();
+    showConfirm(
+      'Update Staff',
+      'Are you sure you want to update this staff member\'s information?',
+      () => {
+        const data = new FormData();
 
-    // send staff object as JSON
-    data.append(
-      "staff",
-      new Blob([JSON.stringify(formData)], { type: "application/json" })
+        data.append(
+          "staff",
+          new Blob([JSON.stringify(formData)], { type: "application/json" })
+        );
+
+        if (image) {
+          data.append("image", image);
+        }
+
+        UpdateStaff(staff.id, data)
+          .then(() => {
+            toast.success("Staff updated successfully!");
+            setShowModal(false);
+            window.location.reload();
+          })
+          .catch(err => {
+            console.error("Update error:", err);
+            toast.error('Failed to update staff');
+          });
+      },
+      'warning'
     );
-
-    // send image if selected
-    if (image) {
-      data.append("image", image);
-    }
-
-    UpdateStaff(staff.id, data)
-      .then(() => {
-        alert("Staff updated successfully");
-        setShowModal(false);
-        window.location.reload();
-      })
-      .catch(err => console.error("Update error:", err));
   };
 
   return (
     <>
+      {/* Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={closeConfirm}
+        type={confirmDialog.type}
+        confirmText={confirmDialog.type === 'danger' ? 'Delete' : 'Confirm'}
+      />
+
       <div className="col-md-3 mb-4">
         <div className="card shadow-sm h-100">
 

@@ -13,10 +13,12 @@
     "animate.css": "^4.1.1",
     "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
+    "install": "^0.13.0",
     "mdb-react-ui-kit": "^10.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.11.0",
+    "react-toastify": "^11.0.5",
     "swiper": "^12.0.3"
   },
   "devDependencies": {
