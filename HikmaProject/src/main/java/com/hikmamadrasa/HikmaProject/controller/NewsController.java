@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/auth/news")
-@CrossOrigin(origins = "http://localhost:3000")
 public class NewsController {
 
     private final NewsService newsService;

@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/auth/about")
-@CrossOrigin(origins = "http://localhost:3000")
 public class MadrasaAboutController {
     private final MadrasaAboutService madrasaAboutService;
     private final ObjectMapper objectMapper;

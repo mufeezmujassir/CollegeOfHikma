@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("api/auth/message")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 public class ManagementController {
     private final ManagementService managementService;
 

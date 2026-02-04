@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/auth/hero")
-@CrossOrigin(origins = "http://localhost:3000")
 
 public class HeroSliderController {
 
