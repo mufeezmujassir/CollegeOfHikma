@@ -45,6 +45,10 @@ const ManagementMessage = () => {
     };
   }, [message]);
 
+  if (!message || message.length === 0) {
+    return null;
+  }
+
   return (
     <div className="management-message-wrapper">
       {message.map((msg, index) => (
@@ -56,7 +60,7 @@ const ManagementMessage = () => {
         >
           <div className="gradient-card p-4 p-md-5 rounded-4 shadow-lg">
             <div className="row align-items-center">
-              
+
               {/* Image Side */}
               <div className="col-md-4 text-center mb-4 mb-md-0">
                 <div className="profile-image-container">

@@ -10,9 +10,9 @@ const Home = () => {
         <PopupBox/>
         <HeroSlider/>
         <UpcommingEvent/>
-        
-        <ManagementMessage/>
         <NewsLayer/>
+        <ManagementMessage/>
+       
         
     </>
   )
