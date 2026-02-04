@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { GetAllMessage, AddMessage, UpdateMessage, DeleteMessage } from "../../../services/newsService";
 import { toast } from 'react-toastify';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
+import Loader from '../../../components/Loader/Loader';
 
 const ManagementMessageManage = () => {
   const [messages, setMessages] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
     image: null,
@@ -56,12 +58,14 @@ const ManagementMessageManage = () => {
   }, []);
 
   const fetchMessages = () => {
+    setLoading(true);
     GetAllMessage()
       .then((res) => setMessages(res.data))
       .catch((err) => {
         console.error(err);
         toast.error('Failed to load messages');
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleSubmit = (e) => {
@@ -140,6 +144,10 @@ const ManagementMessageManage = () => {
     setShowModal(true);
     toast.info('Editing message - make your changes and click Update');
   };
+
+  if (loading) {
+    return <Loader message="Loading messages..." />;
+  }
 
   return (
     <div className="container py-4">

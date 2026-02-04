@@ -1,6 +1,6 @@
 import axios from 'axios';
-
-const REST_API_BASE_URL = 'http://localhost:8080/api/auth/staff';
+const API = import.meta.env.VITE_REST_API_URL;
+const REST_API_BASE_URL = `${API}/staff`;
 
 export const AddStaff = (formData) =>
   axios.post(REST_API_BASE_URL, formData, {

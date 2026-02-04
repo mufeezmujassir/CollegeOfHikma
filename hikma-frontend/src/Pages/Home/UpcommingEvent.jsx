@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { GetAllUpcomming } from "../../services/UpcommingService";
+import Loader from "../../components/Loader/Loader";
 import "./UpcommingEvent.css";
 
 const UpcommingEvent = () => {
   const [filteredEvents, setFilteredEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchUpcomingEvents();
   }, []);
 
   const fetchUpcomingEvents = async () => {
+    setLoading(true);
     try {
       const res = await GetAllUpcomming();
       const allEvents = res.data || [];
@@ -25,6 +28,8 @@ const UpcommingEvent = () => {
       setFilteredEvents(futureEvents);
     } catch (err) {
       console.error("Error fetching upcoming events:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,6 +74,10 @@ const UpcommingEvent = () => {
     if (hours > 0) return `${hours}h ${minutes}m remaining`;
     return `${minutes}m remaining`;
   };
+
+  if (loading) {
+    return <Loader message="Loading events..." />;
+  }
 
   return (
     <div className="container my-5">
@@ -125,10 +134,6 @@ const UpcommingEvent = () => {
                         {event.description}
                       </p>
                     )}
-
-
-
-
                   </div>
                 </div>
               </div>

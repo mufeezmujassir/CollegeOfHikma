@@ -4,12 +4,15 @@ import { GetAllStudents, DeleteStudentsByYear } from "../../../services/studentS
 import { GetAllSubjects } from "../../../services/subjectService";
 import { toast } from 'react-toastify';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
+import Loader from '../../../components/Loader/Loader';
 
 const ManageResult = () => {
   const [groupedResults, setGroupedResults] = useState({});
   const [subjects, setSubjects] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Confirmation dialog state
   const [confirmDialog, setConfirmDialog] = useState({
@@ -48,6 +51,7 @@ const ManageResult = () => {
   }, []);
 
   const loadData = async () => {
+    setLoading(true);
     try {
       const [resResults, resStudents, resSubjects] = await Promise.all([
         GetAllResult(),
@@ -89,6 +93,8 @@ const ManageResult = () => {
     } catch (err) {
       console.error("Error loading data", err);
       toast.error('Failed to load results');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,6 +111,7 @@ const ManageResult = () => {
       async () => {
         const data = new FormData();
         data.append("file", file);
+        setUploading(true);
 
         try {
           await AddResult(data);
@@ -115,6 +122,8 @@ const ManageResult = () => {
         } catch (err) {
           console.error(err);
           toast.error('Failed to upload results');
+        } finally {
+          setUploading(false);
         }
       },
       'warning'
@@ -200,6 +209,10 @@ const ManageResult = () => {
     );
   };
 
+  if (loading) {
+    return <Loader message="Loading results..." />;
+  }
+
   return (
     <div className="container my-4">
       {/* Confirmation Dialog */}
@@ -257,7 +270,9 @@ const ManageResult = () => {
                   >
                     Cancel
                   </button>
-                  <button className="btn btn-success" type="submit">Upload</button>
+                  <button className="btn btn-success" type="submit" disabled={uploading}>
+                    {uploading ? 'Uploading...' : 'Upload'}
+                  </button>
                 </div>
               </form>
             </div>

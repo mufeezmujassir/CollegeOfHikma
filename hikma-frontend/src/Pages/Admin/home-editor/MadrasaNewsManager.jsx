@@ -3,6 +3,7 @@ import { GetAllNews } from '../../../services/madrasanews';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
+import Loader from '../../../components/Loader/Loader';
 import './NewsManage.css';
 
 const MadrasaNewsManager = () => {
@@ -19,8 +20,10 @@ const MadrasaNewsManager = () => {
   const [newImages, setNewImages] = useState([]);
   const [imageIdsToDelete, setImageIdsToDelete] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const API = import.meta.env.VITE_REST_API_URL;
 
-  const API_URL = 'http://localhost:8080/api/auth/news';
+  const API_URL = `${API}/news`;
 
   // Confirmation dialog state
   const [confirmDialog, setConfirmDialog] = useState({
@@ -59,12 +62,14 @@ const MadrasaNewsManager = () => {
   }, []);
 
   const fetchAllNews = async () => {
+    setLoading(true);
     GetAllNews()
       .then((res) => setNewsList(res.data))
       .catch(err => {
         console.error(err);
         toast.error('Failed to load news');
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleInputChange = (e) => {
@@ -199,6 +204,10 @@ const MadrasaNewsManager = () => {
       new Uint8Array(imageData).reduce((data, byte) => data + String.fromCharCode(byte), '')
     )}`;
   };
+
+  if (loading) {
+    return <Loader message="Loading news..." />;
+  }
 
   return (
     <div className="news-container">

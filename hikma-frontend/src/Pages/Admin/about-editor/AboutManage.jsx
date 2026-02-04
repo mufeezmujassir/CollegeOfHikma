@@ -7,6 +7,7 @@ import {
 } from "../../../services/about";
 import { toast } from 'react-toastify';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
+import Loader from '../../../components/Loader/Loader';
 
 const AboutManage = () => {
   const [model, setModel] = useState(false);
@@ -165,6 +166,10 @@ const AboutManage = () => {
     );
   };
 
+  if (loading) {
+    return <Loader message="Loading about items..." />;
+  }
+
   return (
     <div className="container py-4">
       {/* Confirmation Dialog */}
@@ -188,9 +193,6 @@ const AboutManage = () => {
           + Add About
         </button>
       </div>
-
-      {/* Loader */}
-      {loading && <div className="text-center py-5">Loading...</div>}
 
       {/* Cards */}
       <div className="row g-4">

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import StaffCard from './StaffCard';
 import { AddStaff, GetAllStaff } from '../../../services/staffService';
+import Loader from '../../../components/Loader/Loader';
 
 const StaffManagement = () => {
 
   const [staffList, setStaffList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [formdata, setFormdata] = useState({
     staffName: '',
@@ -21,9 +23,11 @@ const StaffManagement = () => {
   }, []);
 
   const fetchStaff = () => {
+    setLoading(true);
     GetAllStaff()
       .then(res => setStaffList(res.data))
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   const handleChange = (e) => {
@@ -63,6 +67,10 @@ const StaffManagement = () => {
     staff.staffName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     staff.staffEmail.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (loading) {
+    return <Loader message="Loading staff..." />;
+  }
 
   return (
     <div className="container mt-4">

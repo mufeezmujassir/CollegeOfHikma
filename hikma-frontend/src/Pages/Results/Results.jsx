@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Loader from '../../components/Loader/Loader'
 import './Results.css'
 
 const Results = () => {
@@ -15,8 +16,10 @@ const Results = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [searched, setSearched] = useState(false);
+    const [initialLoading, setInitialLoading] = useState(true);
+    const API = import.meta.env.VITE_REST_API_URL;
 
-    const API_BASE_URL = 'http://localhost:8080/api/auth';
+    const API_BASE_URL = `${API}`;
 
     // Fetch all data on component mount
     useEffect(() => {
@@ -24,23 +27,26 @@ const Results = () => {
     }, []);
 
     const fetchAllData = async () => {
+        setInitialLoading(true);
         try {
             const [studentsRes, resultsRes, subjectsRes] = await Promise.all([
                 axios.get(`${API_BASE_URL}/student`),
                 axios.get(`${API_BASE_URL}/result`),
                 axios.get(`${API_BASE_URL}/subject`)
             ]);
-            
+
             console.log('✅ Students loaded:', studentsRes.data);
             console.log('✅ Results loaded:', resultsRes.data);
             console.log('✅ Subjects loaded:', subjectsRes.data);
-            
+
             setStudents(studentsRes.data);
             setResults(resultsRes.data);
             setSubjects(subjectsRes.data);
         } catch (err) {
             console.error('❌ Error fetching data:', err);
             setError('Failed to load data from server. Please refresh the page.');
+        } finally {
+            setInitialLoading(false);
         }
     };
 
@@ -75,7 +81,7 @@ const Results = () => {
         // Search for matching student
         const foundStudent = students.find(
             student => student.name.toLowerCase().trim() === formData.name.toLowerCase().trim() &&
-                       student.indexNumber.toString().trim() === formData.indexNumber.trim()
+                student.indexNumber.toString().trim() === formData.indexNumber.trim()
         );
 
         console.log('👤 Found student:', foundStudent);
@@ -84,7 +90,7 @@ const Results = () => {
             if (foundStudent) {
                 // Found matching student
                 setMatchedStudent(foundStudent);
-                
+
                 // Get all results for this student - filter by studentId
                 const studentMarks = results.filter(
                     result => result.studentId === foundStudent.id
@@ -98,7 +104,7 @@ const Results = () => {
                     const subject = subjects.find(sub => sub.id === result.subjectId);
                     const subjectName = subject ? subject.subjectName : 'Unknown Subject';
                     console.log(`Mapping Result ID: ${result.id}, SubjectID: ${result.subjectId} → Subject Name: ${subjectName}`);
-                    
+
                     return {
                         ...result,
                         subjectName: subjectName
@@ -136,6 +142,10 @@ const Results = () => {
         if (studentResults.length === 0) return 0;
         return (calculateTotalMarks() / studentResults.length).toFixed(2);
     };
+
+    if (initialLoading) {
+        return <Loader message="Loading results data..." />;
+    }
 
     return (
         <div className='results-page'>

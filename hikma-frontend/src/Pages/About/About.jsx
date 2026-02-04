@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GetAllAbout } from "../../services/about";
+import Loader from "../../components/Loader/Loader";
 import "./about.css";
 
 const About = () => {
@@ -25,9 +26,9 @@ const About = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-            if(entry.isIntersecting){
-                setShow(true);
-            }
+          if (entry.isIntersecting) {
+            setShow(true);
+          }
         })
       },
       { threshold: 0.2 }
@@ -40,7 +41,7 @@ const About = () => {
     };
   }, [about]);
 
-  if (loading) return <div className="text-center py-5">Loading...</div>;
+  if (loading) return <Loader message="Loading about information..." />;
 
   return (
     <div className="manage-about-wrapper">
@@ -48,9 +49,8 @@ const About = () => {
         <div
           key={msg.id}
           ref={index === 0 ? boxRef : null}
-          className={`welcome-section container my-5 ${
-            show ? "show" : ""
-          }`}
+          className={`welcome-section container my-5 ${show ? "show" : ""
+            }`}
           style={{ animationDelay: `${index * 0.2}s` }}
         >
           <div className="gradient-card p-4 p-md-5 rounded-4 shadow-lg">

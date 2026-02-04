@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const REST_API_URL = 'http://localhost:8080/api/auth/event';
+const API = import.meta.env.VITE_REST_API_URL;
+const REST_API_URL = `${API}/event`;
 
 // Helper function to get auth headers
 const getAuthHeaders = () => {

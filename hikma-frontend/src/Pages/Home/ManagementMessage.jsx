@@ -1,24 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 import "./ManagementMessage.css";
 import { GetAllMessage } from '../../services/newsService';
+import Loader from '../../components/Loader/Loader';
 
 const ManagementMessage = () => {
   const boxRef = useRef();
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchAllMessage();
   }, []);
 
   const fetchAllMessage = async () => {
+    setLoading(true);
     GetAllMessage()
       .then((res) => {
         setMessage(res.data);
         // Trigger animation after data loads
         setTimeout(() => setShow(true), 100);
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   // Intersection Observer for scroll-triggered animation
@@ -44,6 +48,10 @@ const ManagementMessage = () => {
       }
     };
   }, [message]);
+
+  if (loading) {
+    return <Loader message="Loading messages..." />;
+  }
 
   if (!message || message.length === 0) {
     return null;

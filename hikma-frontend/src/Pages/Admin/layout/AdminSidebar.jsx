@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Adminsidebar.css';
 
 const AdminSidebar = () => {
@@ -13,11 +13,7 @@ const AdminSidebar = () => {
     navigate("/");
   };
   const menuItems = [
-    {
-      title: 'Dashboard',
-      path: '/admin/dashboard',
-      icon: '📊'
-    },
+
     {
       title: 'Manage Staff',
       path: '/admin/staff',
@@ -57,7 +53,7 @@ const AdminSidebar = () => {
 
   return (
     <div className={`admin-sidebar ${isCollapsed ? 'collapsed' : ''}`}>
-      
+
       {/* Header Section */}
       <div className="sidebar-header">
         <div className="logo-container">
@@ -69,8 +65,8 @@ const AdminSidebar = () => {
             </div>
           )}
         </div>
-        
-        <button 
+
+        <button
           className="collapse-btn"
           onClick={() => setIsCollapsed(!isCollapsed)}
           title={isCollapsed ? 'Expand' : 'Collapse'}
@@ -84,9 +80,9 @@ const AdminSidebar = () => {
         <ul className="nav-list">
           {menuItems.map((item, index) => (
             <li key={index} className="nav-item">
-              <NavLink 
+              <NavLink
                 to={item.path}
-                className={({ isActive }) => 
+                className={({ isActive }) =>
                   `nav-link ${isActive ? 'active' : ''}`
                 }
                 title={isCollapsed ? item.title : ''}
@@ -104,8 +100,8 @@ const AdminSidebar = () => {
         {/* Settings Section */}
         <div className="sidebar-footer">
           <div className="divider"></div>
-        
-             {isAdminLoggedIn ? (
+
+          {isAdminLoggedIn ? (
             <button className="btn admin-login-btn text-white align-center" onClick={handleLogout}>
               Logout
             </button>
@@ -114,8 +110,8 @@ const AdminSidebar = () => {
               Admin Login
             </Link>
           )}
-            
-           
+
+
         </div>
       </nav>
 

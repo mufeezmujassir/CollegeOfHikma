@@ -1,19 +1,20 @@
 import axios from "axios";
+const API = import.meta.env.VITE_REST_API_URL;
 
-const REST_API_URL="http://localhost:8080/api/auth/news";
+const REST_API_URL = `${API}/news`;
 
-export const GetAllNews=async()=>{
-    return await axios.get(REST_API_URL);
+export const GetAllNews = async () => {
+  return await axios.get(REST_API_URL);
 }
-export const AddNews=async(formdata)=>{
-    return await axios.post(REST_API_URL,formdata,{
-        headers:{'Content-Type':'multipart/form-data'}
-    }
-    );
+export const AddNews = async (formdata) => {
+  return await axios.post(REST_API_URL, formdata, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }
+  );
 }
 
-export const DeleteNews=async(id)=>{
-    return await axios.delete(`${REST_API_URL}/${id}`)
+export const DeleteNews = async (id) => {
+  return await axios.delete(`${REST_API_URL}/${id}`)
 }
 
 export const UpdateNews = async (id, formdata) => {

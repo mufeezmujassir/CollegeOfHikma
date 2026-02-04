@@ -8,16 +8,24 @@ import "swiper/css/navigation";
 import "animate.css";
 
 import { GetAllHeroSlide } from "../../services/sliderService";
+import Loader from "../../components/Loader/Loader";
 import "./HeroSlider.css";
 
 const HeroSlider = () => {
   const [heroSlides, setHeroSlides] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     GetAllHeroSlide()
       .then((res) => setHeroSlides(res.data))
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return <Loader message="Loading slides..." />;
+  }
 
   if (!heroSlides.length) return null;
 

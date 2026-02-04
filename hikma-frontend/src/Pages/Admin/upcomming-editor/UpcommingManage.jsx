@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { GetAllUpcomming, AddUpcomming, UpdateUpcomming, DeleteUpcomming } from '../../../services/UpcommingService';
 import { toast } from 'react-toastify';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
+import Loader from '../../../components/Loader/Loader';
 import './UpcommingManage.css';
 
 const UpcommingManage = () => {
@@ -254,6 +255,10 @@ const UpcommingManage = () => {
             'warning'
         );
     };
+
+    if (loading) {
+        return <Loader message="Loading events..." />;
+    }
 
     return (
         <div className="upcomming-manage-container">

@@ -7,12 +7,14 @@ import {
 } from '../../../services/sliderService';
 import { toast } from 'react-toastify';
 import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
+import Loader from '../../../components/Loader/Loader';
 
 const HeroSliderManager = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [showslider, setShowSlider] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [formdata, setFormdata] = useState({
     image: null,
@@ -56,12 +58,14 @@ const HeroSliderManager = () => {
   }, []);
 
   const fetchShowSlider = () => {
+    setLoading(true);
     GetAllHeroSlide()
       .then(res => setShowSlider(res.data))
       .catch(err => {
         console.error(err);
         toast.error('Failed to load slides');
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleChange = (e) => {
@@ -135,6 +139,10 @@ const HeroSliderManager = () => {
     setShowModal(true);
     toast.info('Editing slide - make your changes and click Update');
   };
+
+  if (loading) {
+    return <Loader message="Loading slides..." />;
+  }
 
   return (
     <div>

@@ -1,12 +1,12 @@
 import axios from "axios";
+const API = import.meta.env.VITE_REST_API_URL;
+const API_URL = `${API}/about`;
 
-const API_URL = "http://localhost:8080/api/auth/about";
-
-export const GetAllAbout = async()=>{
+export const GetAllAbout = async () => {
     return await axios.get(API_URL);
 }
 
-export  const DeleteAbout=async(id)=>{
+export const DeleteAbout = async (id) => {
     return await axios.delete(`${API_URL}/${id}`)
 }
 
