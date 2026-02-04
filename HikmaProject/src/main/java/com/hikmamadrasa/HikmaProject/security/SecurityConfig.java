@@ -32,11 +32,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/auth/**").hasRole("ADMIN")
                         // allow read access to public GET endpoints under /api/auth/**
                         .requestMatchers(HttpMethod.GET, "/api/auth/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // add JWT filter so Authorization header is parsed for non-public requests
         http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -58,6 +56,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin("http://localhost:5174");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);
