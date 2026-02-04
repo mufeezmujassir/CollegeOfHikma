@@ -14,10 +14,12 @@ const UpcommingEvent = () => {
       const res = await GetAllUpcomming();
       const allEvents = res.data || [];
 
-      // Filter out past events
+      // Filter out past events AND inactive events
       const futureEvents = allEvents.filter((event) => {
         const eventDate = new Date(event.EventDate);
-        return eventDate > new Date();
+        const isFuture = eventDate > new Date();
+        const isActive = event.isActivate === true;
+        return isFuture && isActive;
       });
 
       setFilteredEvents(futureEvents);
@@ -124,9 +126,9 @@ const UpcommingEvent = () => {
                       </p>
                     )}
 
-                    
 
-                    
+
+
                   </div>
                 </div>
               </div>
